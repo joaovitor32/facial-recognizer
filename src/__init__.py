@@ -1,3 +1,7 @@
+import os, os.path
+from PIL import Image
+
+ext = ".jpg"
 
 #Function that loads images from specific folder
 def load_images(path):
@@ -33,6 +37,7 @@ def format_images(imgs):
 
 
 if __name__ == '__main__':
+    path = "data/recdev/easy/"
     imgs = load_images(path)
     formatted_images = format_images(imgs)   
     print(formatted_images) 
