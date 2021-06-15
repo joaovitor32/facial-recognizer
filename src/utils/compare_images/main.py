@@ -1,4 +1,4 @@
-from normalize.main import normalize
+from utils.normalize.main import normalize
 
 def compare_images(img1, img2):
     # normalize to compensate for exposure difference, this may be unnecessary
