@@ -1,0 +1,14 @@
+#Facial recognizer input data
+
+#Number to represent infinity
+AUX: 99999999999999999999999
+
+# Max number of allowed iterations 
+NUM_ITER: 8
+
+# Extension of the photos
+EXT: '.jpg'
+
+#Folder containing the photos
+PATH: "data/recdev/easy/"
+
