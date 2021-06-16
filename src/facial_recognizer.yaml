@@ -10,5 +10,6 @@ NUM_ITER: 8
 EXT: '.jpg'
 
 #Folder containing the photos
-PATH: "data/recdev/easy/"
+PATH: "data/recdev/very-easy/"
 
+METHOD: "PCA"

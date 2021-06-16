@@ -1,7 +1,7 @@
-from utils.compare_images.main import compare_images
+import math
 import matplotlib.image as pimg
-
 from libs.yaml.main import yaml_data
+from utils.compare_images.main import compare_images
 
 '''
     Compare an image to test images
