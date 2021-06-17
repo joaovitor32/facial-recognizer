@@ -1,5 +1,6 @@
 import inquirer
 import random
+import copy
 import os, os.path
 from PIL import Image
 import matplotlib.image as pimg
@@ -44,52 +45,61 @@ def format_images(imgs):
 
     return subclass
 
-def cross_validation(comparing_function,train_images_splited,test_images_splited):
-    correct = 0
-    error = 0
-
-    for img in test_images_splited_joined:
-        picked_img = pimg.imread(input_data['PATH'] + img)
-        
-        diff,group,result = comparing_function(picked_img,train_images_splited)
-        if define_class(img) == define_class(group):
-            correct = correct + 1
-        else:
-            error = error + 1
-
-        f, (plt0, plt1) = plt.subplots(1, 2, figsize=(10,5))
-        plt0.imshow(picked_img)
-        plt1.imshow(result)
-        plt.show()
-        
-    return error,correct
 
 def split_set(imgs):
     test_set = []
 
-    for key in imgs:
-        randomImg = random.choice(list(imgs[key]))
+    train_set = copy.deepcopy(imgs)
+
+    for key in train_set:
+        randomImg = random.choice(list(train_set[key]))
         test_set.append(randomImg)
-        imgs[key].remove(randomImg)
+        train_set[key].remove(randomImg)
     
-    return imgs,test_set    
+    return train_set,test_set    
+
+def cross_validation(comparing_function,train_set,test_set):
+    correct = 0
+    error = 0
+
+
+    for img in test_set:
+        picked_img = pimg.imread(input_data['PATH'] + img)    
+        diff,group,result = comparing_function(picked_img,train_set)
+    
+        if define_class(img) == group:
+            correct = correct + 1
+        else:
+            error = error + 1
+
+        '''
+        f, (plt0, plt1) = plt.subplots(1, 2, figsize=(10,5))
+        plt0.imshow(picked_img)
+        plt1.imshow(result)
+        plt.show()
+        '''
   
+    return (correct*100.)/(correct+error)
 
 '''
 Teste set -> ['87-2.jpg', '16-2.jpg', '15-2.jpg', '11-2.jpg', '2-2.jpg']
 Train set -> {'2': ['2-1.jpg'], '11': ['11-1.jpg'], '15': ['15-1.jpg'], '16': ['16-1.jpg'], '87': ['87-1.jpg']}
 '''
 def recognition(imgs,comparing_function):
-    imgs,test_set = split_set(imgs)
-    print(imgs,test_set)
-    return
-    for i in range(input_data['NUM_ITER']):
-        error,correct = cross_validation(comparing_function,train_images_splited,test_images_splited)
-        print("Porcentagem de acerto:",correct/(error+correct))
+
+    tax = 0
+    num_iter = input_data['NUM_ITER']
+
+    for i in range(num_iter):
+        train_set,test_set = split_set(imgs)
+        tax = tax + cross_validation(comparing_function,train_set,test_set) 
+        print(tax)
+
+    print("Acerto médio: {}%".format(tax/num_iter))
+    
 
 if __name__ == '__main__':
 
- 
     input_data = yaml_data()
 
     method_map = {
@@ -102,7 +112,7 @@ if __name__ == '__main__':
 
     main=True
     options = [['Sim',True],['Não',False]]
-    methods = ['PCA','Brute']
+    methods = ['Brute','PCA']
     while main:
         try:
             question = [inquirer.List('prompt',message="Deseja continuar?",choices=[options[0][0],options[1][0]])]

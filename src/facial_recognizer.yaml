@@ -4,12 +4,12 @@
 AUX: 99999999999999999999999
 
 # Max number of allowed iterations 
-NUM_ITER: 8
+NUM_ITER: 10
 
 # Extension of the photos
 EXT: '.jpg'
 
 #Folder containing the photos
-PATH: "data/recdev/very-easy/"
+PATH: "data/recdev/easy/"
 
 METHOD: "PCA"
