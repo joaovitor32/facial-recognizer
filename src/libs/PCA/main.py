@@ -30,7 +30,7 @@ def pca_comparison(img,train_images):
         for selected_img in train_images[img_train]:
             img_compare =  pimg.imread(input_data['PATH'] + selected_img)
             dist = compare_images(PCA(img[:,:,0:3]),PCA(img_compare[:,:,0:3]))
-    
+            
             if dist<diff:
                 diff = dist
                 result = img_compare

@@ -16,6 +16,10 @@ python3.9 setup.py install --prefix="/home/{verify the path}
 python3.9 src/__init__.py
 ```
 
+<strong>Remind to change data in facial_recognizer.yaml<strong>
+
+<p>Avaiable methods: PCA and Brute</p>
+
 <strong>To execute tests:</strong>
 ```
 python3.9 tests/test.py 

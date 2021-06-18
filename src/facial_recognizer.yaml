@@ -4,7 +4,7 @@
 AUX: 99999999999999999999999
 
 # Max number of allowed iterations 
-NUM_ITER: 10
+NUM_ITER: 15
 
 # Extension of the photos
 EXT: '.jpg'
@@ -12,4 +12,8 @@ EXT: '.jpg'
 #Folder containing the photos
 PATH: "data/recdev/easy/"
 
-METHOD: "PCA"
+#Methods -> Brute or PCA
+METHOD: "Brute"
+
+#Display or not images during execution
+SHOW_IMAGES: False

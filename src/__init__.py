@@ -1,6 +1,8 @@
 import inquirer
 import random
 import copy
+import time
+import sys
 import os, os.path
 from PIL import Image
 import matplotlib.image as pimg
@@ -58,6 +60,9 @@ def split_set(imgs):
     
     return train_set,test_set    
 
+'''
+    Cross-validation of the image set
+'''
 def cross_validation(comparing_function,train_set,test_set):
     correct = 0
     error = 0
@@ -72,12 +77,12 @@ def cross_validation(comparing_function,train_set,test_set):
         else:
             error = error + 1
 
-        '''
-        f, (plt0, plt1) = plt.subplots(1, 2, figsize=(10,5))
-        plt0.imshow(picked_img)
-        plt1.imshow(result)
-        plt.show()
-        '''
+        if input_data['SHOW_IMAGES']:
+            f, (plt0, plt1) = plt.subplots(1, 2, figsize=(10,5))
+            plt0.imshow(picked_img)
+            plt1.imshow(result)
+            plt.show()
+    
   
     return (correct*100.)/(correct+error)
 
@@ -90,12 +95,13 @@ def recognition(imgs,comparing_function):
     tax = 0
     num_iter = input_data['NUM_ITER']
 
-    for i in range(num_iter):
+    for iter in range(num_iter):
         train_set,test_set = split_set(imgs)
         tax = tax + cross_validation(comparing_function,train_set,test_set) 
-        print(tax)
-
-    print("Acerto médio: {}%".format(tax/num_iter))
+        print("Iteração: {0} da etapa de reconhecimento. Percentual parcial: {1}% ".format(iter,tax/num_iter),end="\r")                                   
+        time.sleep(0.1)    
+    
+    print("\nTaxa de acerto final: {}%".format(tax/num_iter))
     
 
 if __name__ == '__main__':
@@ -110,23 +116,5 @@ if __name__ == '__main__':
     imgs = load_images()
     formatted_images = format_images(imgs)   
 
-    main=True
-    options = [['Sim',True],['Não',False]]
-    methods = ['Brute','PCA']
-    while main:
-        try:
-            question = [inquirer.List('prompt',message="Deseja continuar?",choices=[options[0][0],options[1][0]])]
-            main = options[[i[0] for i in options].index(inquirer.prompt(question)['prompt'])][1]
-
-            if not main:
-                break
-
-            method_list = [inquirer.List('prompt',message="Qual método?",choices=[methods[0],methods[1]])]
-            choosed_method = methods[[i for i in methods].index(inquirer.prompt(method_list)['prompt'])]
-
-            comparing_function = method_map[choosed_method]
-            recognition(formatted_images,comparing_function)
-
-        except KeyboardInterrupt:
-            print("\n Algm erro aparentemente aconteceu")
-            sys.exit(0)
+    comparing_function = method_map[input_data['METHOD']]
+    recognition(formatted_images,comparing_function)
