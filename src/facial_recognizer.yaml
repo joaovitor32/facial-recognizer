@@ -10,10 +10,13 @@ NUM_ITER: 15
 EXT: '.jpg'
 
 #Folder containing the photos
-PATH: "data/recdev/easy/"
+PATH: "data/recdev/hard/"
 
 #Methods -> Brute or PCA
 METHOD: "Brute"
 
 #Display or not images during execution
 SHOW_IMAGES: False
+
+#Time between images
+TIME_BETWEEN_IMAGES: 1

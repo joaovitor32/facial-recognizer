@@ -63,27 +63,29 @@ def split_set(imgs):
 '''
     Cross-validation of the image set
 '''
-def cross_validation(comparing_function,train_set,test_set):
+def cross_validation(iter,comparing_function,train_set,test_set):
     correct = 0
     error = 0
-
 
     for img in test_set:
         picked_img = pimg.imread(input_data['PATH'] + img)    
         diff,group,result = comparing_function(picked_img,train_set)
     
-        if define_class(img) == group:
+        result_comparison = define_class(img) == group
+        if result_comparison:
             correct = correct + 1
         else:
             error = error + 1
 
         if input_data['SHOW_IMAGES']:
-            f, (plt0, plt1) = plt.subplots(1, 2, figsize=(10,5))
-            plt0.imshow(picked_img)
-            plt1.imshow(result)
+            f, (fig1, fig2) = plt.subplots(1, 2, figsize=(10,5))
+            f.suptitle("Iteration: {}, Result of comparison: {}".format(iter,result_comparison))
+            fig1.imshow(picked_img)
+            fig2.imshow(result)
+            plt.pause(input_data['TIME_BETWEEN_IMAGES'])
+            plt.close()
             plt.show()
     
-  
     return (correct*100.)/(correct+error)
 
 '''
@@ -97,7 +99,7 @@ def recognition(imgs,comparing_function):
 
     for iter in range(num_iter):
         train_set,test_set = split_set(imgs)
-        tax = tax + cross_validation(comparing_function,train_set,test_set) 
+        tax = tax + cross_validation(iter,comparing_function,train_set,test_set) 
         print("Iteração: {0} da etapa de reconhecimento. Percentual parcial: {1}% ".format(iter,tax/num_iter),end="\r")                                   
         time.sleep(0.1)    
     
